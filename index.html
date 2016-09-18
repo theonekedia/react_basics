@@ -28,6 +28,13 @@
 				}else{
 					var navClass = 'navbar navbar-default';
 				}
+				var homeActive = '';
+				var aboutActive = '';
+				if (this.props.page == 'home'){
+					homeActive = 'active';
+				}else if (this.props.page == 'about'){
+					aboutActive = 'active';
+				}
 				return(
 					<div>	
 						<nav className={navClass}>
@@ -43,8 +50,8 @@
 						    </div>
 						    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						      <ul className="nav navbar-nav">
-						        <li className="active"><a href="#">Home <span className="sr-only">(current)</span></a></li>
-						        <li><a href="#">About</a></li>
+						        <li className={homeActive}><a onClick={this.props.homeClick} href="#">Home </a></li>
+						        <li className={aboutActive}><a onClick={this.props.aboutClick} href="#">About</a></li>
 						      </ul>
 						    </div>
 						  </div>
@@ -87,7 +94,22 @@
 				return(
 			    	<div className="Container">
 				    	<div className="row">
-	        				Main Content
+	        				<h2 className='page-header'> Home </h2>
+	        				<p> Some Container </p>
+	      				</div>
+      				</div>
+				)
+			}		
+		});
+
+		// About Page Component
+		var PageAbout = React.createClass({
+			render: function(){
+				return(
+			    	<div className="Container">
+				    	<div className="row">
+	        				<h2 className='page-header'> About Us </h2>
+	        				<p> Some Container </p>
 	      				</div>
       				</div>
 				)
@@ -116,12 +138,35 @@
 
 		// MAin app Component
 		var App = React.createClass({
+			getInitialState: function(){
+				return {
+					page: 'home'
+				}
+			},
+			handleHomeClick: function(){
+				this.setState({
+					page: 'home'
+				})
+			},
+			handleAboutClick: function(){
+				this.setState({
+					page: 'about'
+				})
+			},
 			render: function(){
+				var jumbotron,page ='';
+				if (this.state.page == 'home'){
+					jumbotron = <Jumbotron />;
+					page = <PageHome />;
+				} else if (this.state.page == 'about'){
+					jumbotron = '';
+					page = <PageAbout />;
+				}
 				return(
 					<div>
-						<Navbar brand='My first react Project' color='dark' />
-						<Jumbotron />
-						<PageHome />
+						<Navbar page={this.state.page} homeClick={this.handleHomeClick} aboutClick={this.handleAboutClick} />
+						{jumbotron}
+						{page}
 						<Footer />
 					</div>
 				)
